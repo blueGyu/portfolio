@@ -1,113 +1,128 @@
-import Image from "next/image";
+"use client";
+
+import { useState, useMemo, useEffect } from "react";
+import type { ComponentProps } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import type { MotionProps } from "framer-motion";
+import { Black_Han_Sans } from "next/font/google";
+import { getDisassembled, getAssembled } from "@/utils/hangul";
+
+const blackHanSans = Black_Han_Sans({ subsets: ["latin"], weight: "400" });
 
 export default function Home() {
+  const [isOpened, setIsOpened] = useState(true);
+  const [currentTextIndex, setCurrentTextIndex] = useState(0);
+  const animatedText = useMemo(() => ["보라빛일몰", "애니메이션", "자바스크립트", "좋아하는", "프론트엔드개발자"], []);
+  const handleAnimationEnd = () => {
+    setCurrentTextIndex((prevIndex) => {
+      if (prevIndex === animatedText.length - 1) {
+        setIsOpened(false);
+        return prevIndex;
+      } else {
+        return prevIndex + 1;
+      }
+    });
+  };
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <motion.div className={`${blackHanSans.className} flex flex-col justify-center h-[calc(100vh-80px)] py-5 `}>
+      <motion.div className="text-[9rem] leading-none text-center">안녕하세요.</motion.div>
+      <AnimatePresence>
+        {isOpened && (
+          <motion.div
+            id="likes"
+            className="flex justify-center items-center"
+            initial={{ clipPath: "inset(50% 0% 50% 0%)", height: "0" }}
+            animate={{ clipPath: "inset(0% 0% 0% 0%)", height: "auto" }}
+            exit={{ clipPath: "inset(50% 0% 50% 0%)", height: "0" }}
           >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
+            <TextTyping
+              className="text-9xl"
+              text={animatedText[currentTextIndex]}
+              onAnimationEnd={handleAnimationEnd}
             />
-          </a>
-        </div>
-      </div>
-
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+            <motion.div
+              className="text-9xl"
+              animate={{ opacity: [0, 1, 0] }}
+              transition={{ duration: 0.8, repeat: Infinity }}
+            >
+              _
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <motion.div className="text-[9rem] leading-none text-center">이성규입니다.</motion.div>
+    </motion.div>
   );
+}
+
+type CombinedProps = ComponentProps<"div"> & MotionProps;
+interface ChildProps extends CombinedProps {
+  text: string;
+  onAnimationEnd: () => void;
+}
+
+function TextTyping({ text, onAnimationEnd, ...props }: ChildProps) {
+  const [displayedText, setDisplayedText] = useState("");
+
+  useEffect(() => {
+    const disassambled = getDisassembled(text);
+    const splitText = disassambled
+      .map(({ char, chosung, jungsung, jongsung }, charIndex) => {
+        if (chosung && jungsung && jongsung) {
+          const assembleWithoutJongsung = getAssembled({ chosung, jungsung });
+          return [
+            { index: charIndex, char: chosung },
+            { index: charIndex, char: assembleWithoutJongsung },
+            { index: charIndex, char },
+          ];
+        } else if (chosung && jungsung && !jongsung) {
+          return [
+            { index: charIndex, char: chosung },
+            { index: charIndex, char },
+          ];
+        } else {
+          return [{ index: charIndex, char: chosung }];
+        }
+      })
+      .flat();
+
+    let textIndex = 0;
+    let textCount = 1;
+    let willDispayText = "";
+    let process = "typing";
+    const intervalId = setInterval(() => {
+      const { index, char } = splitText[textIndex];
+      if (process === "typing") {
+        if (textIndex < splitText.length && textCount === index) {
+          willDispayText = willDispayText.substring(0, textCount) + char;
+        } else {
+          textCount = index;
+          willDispayText += char;
+        }
+        textIndex++;
+        setDisplayedText(willDispayText);
+
+        if (textIndex === splitText.length) {
+          textIndex = splitText.length - 1;
+          const timeoutId = setTimeout(() => {
+            process = "erasing";
+            clearTimeout(timeoutId);
+          }, 2000);
+        }
+      } else {
+        willDispayText = willDispayText.substring(0, index);
+        textIndex--;
+        setDisplayedText(willDispayText);
+        if (textIndex === -1) {
+          textIndex = 0;
+          onAnimationEnd();
+        }
+      }
+    }, 70);
+
+    return () => clearInterval(intervalId);
+  }, [text, onAnimationEnd]);
+
+  return <motion.div {...props}>{displayedText}</motion.div>;
 }

@@ -8,13 +8,36 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      colors: {
+        next: "#000000",
+        ts: "#3178c6",
+        js: "#f0e151",
+      },
       backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        credit: "url('/img/credit.svg')",
+      },
+      animation: {
+        sunset: "sunset 2s linear infinite",
+        credit: "sunset 4s linear infinite",
+      },
+      keyframes: {
+        sunset: {
+          "0%": { backgroundPosition: "50% 0%" },
+          "100%": { backgroundPosition: "50% 100%" },
+        },
+        credit: {
+          "0%": { backgroundPosition: "50% 100%" },
+          "100%": { backgroundPosition: "50% 0%" },
+        },
+        ping: {
+          "60%, 100%": {
+            transform: "scale(1.05)",
+            opacity: "0",
+          },
+        },
       },
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/typography")],
 };
 export default config;
