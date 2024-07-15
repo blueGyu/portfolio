@@ -36,10 +36,7 @@ function StackBadge({ stacks }: { stacks: string[] }) {
     <div className="flex space-x-1.5 my-1.5">
       {stacks.map((stack, stackIndex) => {
         return (
-          <div
-            key={stackIndex}
-            className={`text-sm px-1 ${badgeColor(stack)} rounded-sm`}
-          >
+          <div key={stackIndex} className={`text-sm px-1 ${badgeColor(stack)} rounded-sm`}>
             {stack}
           </div>
         );

@@ -1,4 +1,4 @@
-import { getAllPostsMetadata } from "@/utils/getMdFileData";
+import { getAllPostsMetadata } from "@/utils/getMdxFileData";
 import CategoryView from "@/components/blog/CategoryView";
 
 export default function BlogPage() {

@@ -36,6 +36,15 @@ const config: Config = {
           },
         },
       },
+      typography: {
+        DEFAULT: {
+          css: {
+            pre: {
+              margin: "0",
+            },
+          },
+        },
+      },
     },
   },
   plugins: [require("@tailwindcss/typography")],
