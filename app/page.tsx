@@ -67,25 +67,23 @@ function TextTyping({ text, onAnimationEnd, ...props }: ChildProps) {
 
   useEffect(() => {
     const disassambled = getDisassembled(text);
-    const splitText = disassambled
-      .map(({ char, chosung, jungsung, jongsung }, charIndex) => {
-        if (chosung && jungsung && jongsung) {
-          const assembleWithoutJongsung = getAssembled({ chosung, jungsung });
-          return [
-            { index: charIndex, char: chosung },
-            { index: charIndex, char: assembleWithoutJongsung },
-            { index: charIndex, char },
-          ];
-        } else if (chosung && jungsung && !jongsung) {
-          return [
-            { index: charIndex, char: chosung },
-            { index: charIndex, char },
-          ];
-        } else {
-          return [{ index: charIndex, char: chosung }];
-        }
-      })
-      .flat();
+    const splitText = disassambled.flatMap(({ char, chosung, jungsung, jongsung }, charIndex) => {
+      if (chosung && jungsung && jongsung) {
+        const assembleWithoutJongsung = getAssembled({ chosung, jungsung });
+        return [
+          { index: charIndex, char: chosung },
+          { index: charIndex, char: assembleWithoutJongsung },
+          { index: charIndex, char },
+        ];
+      } else if (chosung && jungsung && !jongsung) {
+        return [
+          { index: charIndex, char: chosung },
+          { index: charIndex, char },
+        ];
+      } else {
+        return [{ index: charIndex, char: chosung }];
+      }
+    });
 
     let textIndex = 0;
     let textCount = 1;

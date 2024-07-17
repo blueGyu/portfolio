@@ -1,20 +1,210 @@
 ---
 title: "블로그 제작기 2편"
-stacks: ["Next.js", "TS", "JS"]
+stacks: ["Next.js", "TS", "JS", "tailwindcss", "Framer"]
 create_date: "2024-07-15"
 series: "개인 블로그 겸 포트폴리오 제작기"
 category: "토이 프로젝트"
-description: "개인 블로그 겸 포트폴리오 제작, 배포 과정을 설명하는 글입니다."
+description: "사이트에 애니메이션들을 적용하는 과정을 작성한 글입니다."
 ---
 
-# 블로그 제작기 2편 - Framer motion으로 애니메이션 한 입
+## 블로그 제작기 2편 - Framer motion, JavaScript로 애니메이션 한 입
 
-이전 블로그 게시글 작성
+이전 글을 보고 싶으신 분은 [여기](http://localhost:3000/blog/build_blog_1)를 클릭해주세요.
 
-적용한 애니메이션 1.
+사이트에 애니메이션을 적용하여 해당 부분에 대한 집중돌르 높이고 싶었다. Framer motion을 이용해서 간단한 애니메이션을 쉽게 적용하고자 했다.
 
-적용한 애니메이션 2.
+### 적용한 애니메이션 1. 드롭다운 메뉴
 
-## 정리
+블로그 게시글을 '어떻게 카테고리 별로 필터링할 수 있을까?'를 고민하다가 버튼을 나열하는 것보다는
+(아직 카테고리가 많이 없어서)드롭다운을 사용하는 것이 깔끔하고 한 눈에 전체 카테고리를 확인할 수 있을 것 같았다.(카테고리가 많아지면 더 좋은 것을 찾아봐야지.)
 
-애니메이션 만드는 게 재미있었고, 다른 애니메이션을 추가하고 싶다.
+드롭다운 메뉴의 기본 작동 원리는 토글 시 숨겨져있던 하위 메뉴가 표시되는 것이다. 하위 메뉴가 나타나고 사라질 때, 애니메이션을 추가하기로 했다.
+
+Framer motion 공식 홈페이지에 드롭다운 메뉴 적용 예시가 있어 참고하였다.
+
+드롭다운 메뉴 적용 예시를 확인하고 싶으신 분은 [여기](https://www.framer.com/motion/animation/#variants)를 클릭해주세요.
+
+clip path를 처음 알게 되었다. 클립을 적용하면 적용한 부분만 보여주는 css 속성이다.
+mdn에서 clip-path에 대한 정보를 확인하고 싶으신 분은 [여기](https://developer.mozilla.org/ko/docs/Web/CSS/clip-path)를 클릭해주세요.
+
+<Code id="dropdown" example={`<motion.ul
+    className="absolute top-14 left-0 z-10 w-52 border rounded-md bg-zinc-50"
+    variants={{
+        open: {
+            clipPath: "inset(0% 0% 0% 0%)",
+            transition: {
+            type: "spring",
+            bounce: 0,
+            duration: 0.7,
+            delayChildren: 0.3,
+            staggerChildren: 0.05,
+            },
+        },
+        closed: {
+            // clipPath: "inset(10% 50% 90% 50% round 6px)",
+            clipPath: "inset(0% 0% 110% 0%)",
+            transition: {
+            type: "spring",
+            bounce: 0,
+            duration: 0.2,
+            },
+        },
+    }}
+    >
+        ...li items
+</motion.ul>`
+}
+/>
+위와 같이 적용하였을 때, 위에서 아래 방향으로 드롭다운 메뉴가 나타나고 아래에서 위 방향으로 메뉴가 사라진다.
+
+<PostImage imgPath={"/build_blog/2/dropdownmenu.gif"} imgAlt={"dropdown menu animation"}>
+  <div className="flex flex-col justify-center items-center mt-3">
+    <span className="text-sm">적용 예시</span>
+  </div>
+</PostImage>
+
+### 적용한 애니메이션 2. 텍스트 타이핑
+
+사이트의 목적이 포트폴리오 겸 블로그이기 때문에 메인 페이지에 나를 소개하는 간단한 문구를 작성하려고 했는데,
+대충 보고 넘길 수 있을 것 같아 '텍스트를 이용해 할 수 있는 애니메이션이 어떤 것이 있을까?'를 찾아보다가 텍스트 타이핑 애니메이션을 적용하기로 했다.
+
+텍스트 타이핑 애니메이션의 동작 원리는 한 음절씩 일정 시간마다 추가하는 것이다. 텍스트 지우는 애니메이션 또한 일정 시간마다 한 음절씩 지우는 것이다.
+
+조금 더 실제 타이핑하는 것처럼 하기 위해 음절을 자음과 모음으로 분리하여 화면에 표시하였다. 분리가 필용한 경우를 생각해보니 두 경우가 있었다.
+
+1. 받침이 없는 경우 : 자음 → 음절 (예시: ㄱ → 가)
+2. 받침이 있는 경우 : 자음 → 자음 + 모음 → 자음 + 모음 + 자음 (예시: ㄱ → 가 → 각)
+
+음절 분리, 음소 병합 기능 개발을 위해 참고한 사이트를 확인하고 싶은신 분은 [여기](https://blex.me/@baealex/%ED%95%9C%EA%B8%80-%EB%B6%84%EB%A6%AC-%EB%B3%91%ED%95%A9)를 클릭해주세요.
+
+먼저, 음절을 자음과 모음으로 분리하는 기능을 만들어보자.
+<Code id="phoneme" example={`const CHOSUNG = ["ㄱ", "ㄲ", "ㄴ", "ㄷ", "ㄸ", "ㄹ", "ㅁ", "ㅂ", "ㅃ", "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅉ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"];
+const JUNGSUNG = ["ㅏ", "ㅐ", "ㅑ", "ㅒ", "ㅓ", "ㅔ", "ㅕ", "ㅖ", "ㅗ", "ㅘ", "ㅙ", "ㅚ", "ㅛ", "ㅜ", "ㅝ", "ㅞ", "ㅟ", "ㅠ", "ㅡ", "ㅢ", "ㅣ"];
+const JONGSUNG = ["", "ㄱ", "ㄲ", "ㄳ", "ㄴ", "ㄵ", "ㄶ", "ㄷ", "ㄹ", "ㄺ", "ㄻ", "ㄼ", "ㄽ", "ㄾ", "ㄿ", "ㅀ", "ㅁ", "ㅂ", "ㅄ", "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"];`
+} />
+
+위의 배열들은 유니코드에 등록되어있는 음소이다. 각 배열의 0번과 마지막 인덱스를 가진 음소를 조합하면 '가'로 시작하여 '힣'로 끝난다. 이것으로 인수로 받을 텍스트가 한글인지 확인할 수 있다.
+
+<Code id="disassembled" example={`export function getDisassembled(text: string) {
+  const splitHangul = text.split("").map((char) => {
+    const charCode = char.charCodeAt(0);
+    if (charCode >= 0xac00 && charCode <= 0xd7a3) {
+      const syllableIndex = charCode - 0xac00;
+      const chosungIndex = Math.floor(syllableIndex / (21 * 28));
+      const jungsungIndex = Math.floor((syllableIndex % (21 * 28)) / 28);
+      const jongsungIndex = syllableIndex % 28;
+
+      const chosung = CHOSUNG[chosungIndex];
+      const jungsung = JUNGSUNG[jungsungIndex];
+      const jongsung = JONGSUNG[jongsungIndex];
+
+      return {
+        char,
+        chosung,
+        jungsung,
+        jongsung,
+      };
+    }
+
+    return {
+      char,
+      chosung: "",
+      jungsung: "",
+      jongsung: "",
+    };
+  });
+
+  return splitHangul;
+}`
+} />
+위의 코드는 텍스트를 음절 → 음소로 나눠주는 코드이다. 0xac00는 '가'에, 0xd7a3는 '힣'에 해당하는 유니코드이다.
+범위로 한글 여부를 확인하고 초성, 중성, 종성 배열의 인덱스를 구한 뒤 값을 리턴해주고 있다.
+
+받침이 있는 음절의 경우 타이핑 중간 받침 없는 음절이 필요하여 음절 분리한 일부분을 병합시켜주는 기능이 필요했다.
+*(예시: 각을 입력한 경우 ㄱ → 가 → 각 순으로 진행되기 때문에 '가'를 만들기 위해 음소 병합 기능이 필요했다.)*
+
+음소 병합 기능의 원리는 인수로 받은 음소들의 인덱스를 구한 뒤 계산하여 해당하는 음절의 유니코드를 도출하는 것이다.
+
+<Code id="assembled" example={`export function getAssembled({ chosung, jungsung, jongsung = "" }: AssembledHangul) {
+  if (chosung === "" || jungsung === "") {
+    return "chosung, jungsung의 값이 없습니다.";
+  }
+
+  const chosungIndex = CHOSUNG.indexOf(chosung);
+  const jungsungIndex = JUNGSUNG.indexOf(jungsung);
+  const jongsungIndex = JONGSUNG.indexOf(jongsung);
+
+  const startHangulUnicode = 0xac00; // 가
+  const assembledUnicode = startHangulUnicode + chosungIndex * 21 * 28 + jungsungIndex * 28 + jongsungIndex;
+
+  return String.fromCharCode(assembledUnicode);
+}`
+} />
+
+위의 코드는 참고했던 사이트에 있는 것처럼 하면 인덱스를 도출하는 과정에서 정확하게 도출할 수 없어, 수정한 코드이다.
+
+이제 일정 시간마다 음절을 추가하고 삭제하는 기능을 추가하면 애니메이션을 만들 수 있다.
+
+<Code id="text_animation" example={`function TextTyping({ text, onAnimationEnd, ...props }: ChildProps) {
+  const [displayedText, setDisplayedText] = useState("");
+
+  useEffect(() => {
+    const disassambled = getDisassembled(text);
+    const splitText = disassambled.flatMap(({ char, chosung, jungsung, jongsung }, charIndex) => {
+      ...음절 분리 코드
+    });
+
+    let textIndex = 0;
+    let textCount = 1;
+    let willDispayText = "";
+    let process = "typing";
+    const intervalId = setInterval(() => {
+      const { index, char } = splitText[textIndex];
+      if (process === "typing") {
+        if (textIndex < splitText.length && textCount === index) {
+          willDispayText = willDispayText.substring(0, textCount) + char;
+        } else {
+          textCount = index;
+          willDispayText += char;
+        }
+        textIndex++;
+        setDisplayedText(willDispayText);
+
+        if (textIndex === splitText.length) {
+          textIndex = splitText.length - 1;
+          const timeoutId = setTimeout(() => {
+            process = "erasing";
+            clearTimeout(timeoutId);
+          }, 2000);
+        }
+      } else {
+        willDispayText = willDispayText.substring(0, index);
+        textIndex--;
+        setDisplayedText(willDispayText);
+        if (textIndex === -1) {
+          textIndex = 0;
+          onAnimationEnd();
+        }
+      }
+    }, 70);
+
+    return () => clearInterval(intervalId);
+  }, [text, onAnimationEnd]);
+
+  return <motion.div {...props}>{displayedText}</motion.div>;
+}`
+} />
+
+위의 코드는 음절 분리 후 한 글자씩 추가하고 텍스트가 완성되었을때, 일정 시간 노출 후 지우는 코드이다.
+framer motion을 사용하고 있기 때문에 motion.div로 작성하였고, 사용하지 않으면 그냥 div사용하시면 됩니다.
+
+<PostImage imgPath={"/build_blog/2/introduce.gif"} imgAlt={"dropdown menu animation"}>
+  <div className="flex flex-col justify-center items-center mt-3">
+    <span className="text-sm">적용 예시</span>
+  </div>
+</PostImage>
+
+### 정리
+
+적용해보고 싶은 애니메이션을 직접 적용해보기 위해 원리를 파악하고 참고자료를 찾고 나의 상황에 맞게 수정해 완성하니 재미있고 새로운 것들을 배울 수 있어서 좋았다.
+추가하고 싶은 애니메이션을 발견하면 추가할 이유를 만들어서 블로그에 적용해봐야겠다.

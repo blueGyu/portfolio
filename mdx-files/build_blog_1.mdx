@@ -1,22 +1,22 @@
 ---
 title: "블로그 제작기 1편"
-stacks: ["Next.js", "TS", "JS"]
+stacks: ["Next.js", "TS", "JS", "tailwindcss", "Framer"]
 create_date: "2024-07-14"
 series: "개인 블로그 겸 포트폴리오 제작기"
 category: "토이 프로젝트"
-description: "개인 블로그 겸 포트폴리오 제작, 배포 과정을 설명하는 글입니다."
+description: "마크다운을 이용한 정적 블로그 사이트를 구축하는 과정을 작성한 글입니다."
 ---
 
 import PostImage from "@/components/mdx/PostImage";
 import Library from "@/components/mdx/Library";
 import Code from "@/components/mdx/Code";
 
-# 블로그 제작기 1편 - Next.js, tailwindcss로 블로그 한 입
+## 블로그 제작기 1편 - Next.js, tailwindcss로 블로그 한 입
 
 다시 IT회사에 취업하기 위해 뭐부터 해야할까 고민하다가 개인 블로그 겸 포트폴리오 사이트를 제작하며 React, Typescript를 연습하기로 했다.
 찾다보니 마크다운을 이용해서 게시글을 작성하는 방법이 있다는 것을 알게 되어 해당 방법으로 사이트를 제작하기로 했다.
 
-## 1. 마크다운과 정적 사이트
+### 1. 마크다운과 정적 사이트
 
 먼저, 마크다운 파일을 페이지에 표현하는 것부터 시작하였다.
 웹 유시보수는 해봤지만, 맨땅에 새로 만드는 것은 처음이라 다른 사람이 한 자료를 참고하였다. 참고자료는 아래 이미지를 확인하시면 됩니다.
@@ -76,7 +76,7 @@ export default function PostPage({ params }: { params: { category: string; postn
 마크다운 중간에 jsx 문법을 적용하기 위해서는 몇 가지 작업이 필요합니다.
 위의 코드처럼 MDXRemote 태그의 속성에 components를 추가하면, mdx 파일의 마크다운 중간에 추가한 컴포넌트 또는 각 태그를 커스텀하여 사용할 수 있다.
 
-## 2. 마크다운에 스타일 한 스푼
+### 2. 마크다운에 스타일 한 스푼
 
 동영상을 참고하여 사이트를 만들었을 경우, 게시글에 디자인이 적용이 되어있지 않다.
 찾다보니 tailwindcss의 공식 플러그인, <Library library="tailwindcss/typography" />로 간편하게 스타일을 적용할 수 있었다.
@@ -92,7 +92,7 @@ export default function PostPage({ params }: { params: { category: string; postn
 
 장점은 쉽고 빠르게 마크다운에서 JSX로 변환된 요소에 스타일을 적용할 수 있고 사용 방법이 tailwindcss와 같다. 단점은 커스텀하려면 생각보다 수정해야할 부분이 많을 수 있다.
 
-## 정리
+### 정리
 
 위 여러 사이트를 참고하며 Next.js와 tailwindcss를 사용하여 정적 블로그의 뼈대를 만들었다. 두 스택을 사용하며 느낀 점은 생각보다 빠르게 웹 사이트를 구축할 수 있었다.
 아직 깊이 사용해보지는 못했지만, 해당 스택을 사용하는 회사에 취업했으면 좋겠다.

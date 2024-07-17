@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function PostCard(post: PostProps) {
   return (
-    <div className="border p-5 rounded-md">
+    <div className="border-2 p-5 rounded-md hover:border-zinc-400">
       <Link href={`/blog/${post.postname}`}>
         <div className="text-sm">{post.series}</div>
         <div className="text-2xl">{post.title}</div>

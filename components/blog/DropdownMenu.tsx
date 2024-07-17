@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  MouseEvent as ReactMouseEvent,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { MouseEvent as ReactMouseEvent, useEffect, useRef, useState } from "react";
 import { motion, Variants } from "framer-motion";
 import { ExpandMoreRounded } from "@mui/icons-material";
 
@@ -24,11 +19,7 @@ const itemVariants: Variants = {
   closed: { opacity: 0, y: 20, transition: { duration: 0.2 } },
 };
 
-export default function DropdownMenu({
-  selectedCategory,
-  categories,
-  onClick,
-}: CategoryButtonProps) {
+export default function DropdownMenu({ selectedCategory, categories, onClick }: CategoryButtonProps) {
   const [isOpened, setIsOpened] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -99,9 +90,6 @@ export default function DropdownMenu({
                 duration: 0.2,
               },
             },
-          }}
-          style={{
-            pointerEvents: isOpened ? "auto" : "none",
           }}
         >
           <motion.li
